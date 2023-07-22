@@ -9,7 +9,7 @@ build-mindetach-module = false
 apkmirror-dlurl = "https://apkmirror.com/apk/google-inc/youtube/"
 build-mode = "module"
 version = "latest"
-excluded-patches = "always-autorepeat copy-video-url disable-player-popup-panels disable-zoom-haptics enable-debugging external-downloads hide-autoplay-button hide-player-overlay hide-seekbar hide-timestamp hide-video-action-buttons old-video-quality-menu open-links-externally playback-speed premium-heading tablet-mini-player theme vanced-microg-support wide-searchbar"
+excluded-patches = "always-autorepeat copy-video-url disable-player-popup-panels disable-zoom-haptics enable-debugging external-downloads hide-autoplay-button hide-player-overlay hide-seekbar hide-timestamp hide-video-action-buttons old-video-quality-menu open-links-externally playback-speed premium-heading spoof-app-version tablet-mini-player theme vanced-microg-support wide-searchbar"
 
 [Tiktok]
 apkmirror-dlurl = "https://apkmirror.com/apk/tiktok-pte-ltd/tik-tok-including-musical-ly/"
