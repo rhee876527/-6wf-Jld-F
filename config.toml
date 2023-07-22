@@ -8,8 +8,10 @@ build-mindetach-module = false
 [YouTube]
 apkmirror-dlurl = "https://apkmirror.com/apk/google-inc/youtube/"
 build-mode = "module"
-version = "latest"
-excluded-patches = "vanced-microg-support"
+excluded-patches = ""                                                 # space-seperated patches to exclude (multiline strings are not supported)
+included-patches = ""                                                 # space-seperated patches to include (non-excluded patches are included by default)
+version = "latest"                                                      # 'auto', 'latest', 'beta' or a custom one like '17.40.41'
+exclusive-patches = false
 
 [Tiktok]
 apkmirror-dlurl = "https://apkmirror.com/apk/tiktok-pte-ltd/tik-tok-including-musical-ly/"
