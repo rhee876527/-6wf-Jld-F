@@ -9,7 +9,7 @@ build-mindetach-module = false
 apkmirror-dlurl = "https://apkmirror.com/apk/google-inc/youtube/"
 build-mode = "module"
 version = "latest"
-excluded-patches = "old-video-quality-menu tablet-mini-player vanced-microg-support wide-searchbar"
+excluded-patches = "vanced-microg-support"
 
 [Tiktok]
 apkmirror-dlurl = "https://apkmirror.com/apk/tiktok-pte-ltd/tik-tok-including-musical-ly/"
