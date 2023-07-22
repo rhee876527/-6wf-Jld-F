@@ -1,5 +1,5 @@
+YouTube: 18.23.35  
 Tiktok: 30.5.3  
-YouTube: 18.27.35  
 
 Install [Vanced Microg](https://github.com/TeamVanced/VancedMicroG/releases) for non-root YouTube or YT Music  
 
