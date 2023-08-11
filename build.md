@@ -1,5 +1,5 @@
 YouTube: 18.23.35  
-TikTok: 30.6.4  
+TikTok: 30.8.3  
 
 Install [Vanced Microg](https://github.com/TeamVanced/VancedMicroG/releases) for non-root YouTube or YT Music  
 
@@ -8,7 +8,7 @@ Install [Vanced Microg](https://github.com/TeamVanced/VancedMicroG/releases) for
 ---
 Changelog:  
 CLI: j-hc/revanced-cli-2.23.0-all.jar  
-Integrations: ReVanced/revanced-integrations-0.115.0.apk  
+Integrations: ReVanced/revanced-integrations-0.115.1.apk  
 Patches: ReVanced/revanced-patches-2.187.0.jar  
 
 ### [2.187.0](https://github.com/ReVanced/revanced-patches/compare/v2.186.0...v2.187.0) (2023-08-02)
