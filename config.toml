@@ -21,4 +21,5 @@ enabled = true
 #archive-dlurl = "https://archive.org/download/jhc-apks/apks/com.zhiliaoapp.musically"
 apkmirror-dlurl = "https://www.apkmirror.com/apk/tiktok-pte-ltd/tik-tok-including-musical-ly"
 included-patches = "Downloads Hide ads SIM spoof Settings"
-exclusive-patches = true
+#exclusive-patches = true
+excluded-patches = ""
