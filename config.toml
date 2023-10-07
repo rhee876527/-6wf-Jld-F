@@ -7,7 +7,7 @@ build-mindetach-module = false
 
 [YouTube]
 build-mode = "module"                                                   # 'both', 'apk' or 'module'
-excluded-patches = "external-downloads old-video-quality-menu tablet-mini-player vanced-microg-support wide-searchbar"  # space-seperated patches to exclude (multiline strings are not supported)                                                 # space-seperated patches to exclude (multiline strings are not supported)
+excluded-patches = "'External downloads' 'Copy video url' 'Playback speed' 'Always autorepeat' 'Vanced MicroG support' 'Disable zoom haptics' 'Enable debugging' 'Hide seekbar' 'Hide autoplay button' 'Wide searchbar' 'Enable tablet layout' 'Theme' 'Tablet mini player' 'Alternative thumbnails'"                                        # space-seperated patches to exclude (multiline strings are not supported)
 included-patches = ""                                                 # space-seperated patches to include (non-excluded patches are included by default)
 version = "auto"                                                      # 'auto', 'latest', 'beta' or a custom one like '17.40.41'
 archive-dlurl = "https://archive.org/download/jhc-apks/apks/com.google.android.youtube"
@@ -17,7 +17,8 @@ archive-dlurl = "https://archive.org/download/jhc-apks/apks/com.google.android.y
 #archive-dlurl = "https://archive.org/download/jhc-apks/apks/com.twitter.android"
 
 [TikTok]
-enabled = false
+enabled = true
 #archive-dlurl = "https://archive.org/download/jhc-apks/apks/com.zhiliaoapp.musically"
-included-patches = "hide-ads settings show-seekbar sim-spoof"
 apkmirror-dlurl = "https://www.apkmirror.com/apk/tiktok-pte-ltd/tik-tok-including-musical-ly"
+included-patches = "Downloads Hide ads SIM spoof Settings"
+exclusive-patches = true
