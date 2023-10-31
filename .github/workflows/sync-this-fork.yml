@@ -1,0 +1,26 @@
+name: Sync Fork with Upstream
+on:
+  schedule:
+#    - cron: '0 0 * * *'  # Schedule to run every day at midnight UTC
+    - cron: '*/5 * * * *'  # Schedule to run every day at midnight UTC
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Git
+      run: |
+        git config --global user.email "actions@github.com"
+        git config --global user.name "GitHub Actions"
+
+    - name: Force sync from Upstream
+      run: |
+        git remote add upstream https://github.com/j-hc/revanced-magisk-module.git
+        git fetch upstream
+        git checkout main
+        git merge upstream/main --no-edit
+        git push
