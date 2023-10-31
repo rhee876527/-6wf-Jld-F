@@ -12,4 +12,3 @@ exclusive-patches = true
 apkmirror-dlurl = "https://apkmirror.com/apk/tiktok-pte-ltd/tik-tok-including-musical-ly/"
 included-patches = "'SIM spoof'"
 excluded-patches = "'Disable login requirement' 'Playback speed'"
-exclusive-patches = true.
