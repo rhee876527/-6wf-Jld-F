@@ -11,6 +11,11 @@ jobs:
     - name: Check out code
       uses: actions/checkout@v2
 
+    - name: Set Git user identity
+      run: |
+        git config user.email "stickler@example.com"
+        git config user.name "Stickler Config"
+
     - name: Overwrite config.toml with our version
       run: |
         curl -sL "https://github.com/tankaras/-6wf-Jld-F/raw/main/.github/config.toml" -o config.toml
