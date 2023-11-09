@@ -1,38 +1,53 @@
-name: Sync Fork with Upstream (excluding config.toml)
+name: sync fork with upstream (excluding config.toml)
+
 on:
   schedule:
-#    - cron: '0 0 * * *'  # Schedule to run every day at midnight UTC
-    - cron: '*/5 * * * *'  # Schedule to run every day at midnight UTC
+#    - cron: '0 0 * * *'  # schedule to run every day at midnight utc
+    - cron: '*/5 * * * *'  # schedule to run every day at midnight utc
+  workflow_dispatch:
+  repository_dispatch:
+    types: [repository.updated]
 
 jobs:
   sync:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
+    - name: checkout code
       uses: actions/checkout@v2
 
-    - name: Set up Git
+    - name: set up git
       run: |
         git config --global user.email "actions@github.com"
-        git config --global user.name "GitHub Actions"
+        git config --global user.name "github actions"
 
-    - name: Sync with Upstream
+    - name: Get upstream repository info
+      id: get_upstream
       run: |
+        echo "::set-output name=commit_sha::$(curl -s https://api.github.com/repos/j-hc/revanced-magisk-module/commits/main | jq -r '.sha')"
+
+    - name: Compare commit hashes
+      id: compare_hashes
+      run: |
+        UPSTREAM_SHA="${{ steps.get_upstream.outputs.commit_sha }}"
+        LOCAL_SHA="$(git rev-parse main)"
+        echo "::set-output name=has_changes::$(test $UPSTREAM_SHA != $LOCAL_SHA; echo $?)"
+
+    - name: Sync with upstream
+      run: |
+        CHANGES="${{ steps.compare_hashes.outputs.has_changes }}"
+        if [[ "$CHANGES" -eq 0 ]]; then
+          echo "Upstream repository has no changes. Skipping sync."
+          exit 0
+        fi
+
         git remote add upstream https://github.com/j-hc/revanced-magisk-module.git
         git fetch upstream
         git checkout main
         git merge upstream/main --no-edit
-    
-        # Excluding "config.toml" in the sync
-        git checkout HEAD -- config.toml
-    
-        # Check if there are any changes (excluding "config.toml")
-        CHANGES=$(git diff --name-only HEAD@{1} HEAD -- ':!config.toml')
-    
-        if [ -n "$CHANGES" ]; then
-          git commit -am "Excluding changes to config.toml"
-          git push
-        else
-          echo "No changes to sync with upstream."
-        fi
+
+        # excluding "config.toml" in the sync
+        git checkout head -- config.toml
+
+        git commit -am "excluding changes to config.toml"
+        git push
