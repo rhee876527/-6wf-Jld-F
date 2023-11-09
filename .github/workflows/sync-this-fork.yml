@@ -1,8 +1,8 @@
 name: Sync Fork with Upstream (excluding config.toml)
 on:
   schedule:
-    - cron: '0 0 * * *'  # Schedule to run every day at midnight UTC
-#    - cron: '*/5 * * * *'  # Schedule to run every day at midnight UTC
+#    - cron: '0 0 * * *'  # Schedule to run every day at midnight UTC
+    - cron: '*/5 * * * *'  # Schedule to run every day at midnight UTC
 
 jobs:
   sync:
@@ -23,9 +23,16 @@ jobs:
         git fetch upstream
         git checkout main
         git merge upstream/main --no-edit
-
+    
         # Excluding "config.toml" in the sync
         git checkout HEAD -- config.toml
-
-        git commit -am "Excluding changes to config.toml"
-        git push
+    
+        # Check if there are any changes (excluding "config.toml")
+        CHANGES=$(git diff --name-only HEAD@{1} HEAD -- ':!config.toml')
+    
+        if [ -n "$CHANGES" ]; then
+          git commit -am "Excluding changes to config.toml"
+          git push
+        else
+          echo "No changes to sync with upstream."
+        fi
