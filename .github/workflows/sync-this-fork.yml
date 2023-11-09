@@ -2,8 +2,8 @@ name: sync fork with upstream (excluding config.toml)
 
 on:
   schedule:
-#    - cron: '0 0 * * *'  # schedule to run every day at midnight utc
-    - cron: '*/5 * * * *'  # schedule to run every day at midnight utc
+    - cron: '0 0 * * *'  # schedule to run every day at midnight utc
+#    - cron: '*/5 * * * *'  # schedule to run every day at midnight utc
   workflow_dispatch:
   repository_dispatch:
     types: [repository.updated]
