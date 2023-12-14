@@ -26,6 +26,8 @@ jobs:
       run: |
         git merge --no-commit --no-ff --allow-unrelated-histories upstream/main
         # Skip the specific file from being committed
+        git checkout HEAD -- config.toml
+        git add -u 
         git reset -- config.toml
       
     - name: Commit changes
