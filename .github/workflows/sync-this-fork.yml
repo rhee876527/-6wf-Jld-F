@@ -22,7 +22,12 @@ jobs:
     - name: Fetch upstream changes
       run: git fetch upstream
 
+    - name: Check for changes
+      id: check_changes
+      run: echo ::set-output name=changes::$(git rev-list HEAD...upstream/main --count)
+
     - name: Merge changes (excluding config.toml)
+      if: steps.check_changes.outputs.changes > 0
       run: |
         git merge --no-commit --no-ff --allow-unrelated-histories --strategy-option=theirs upstream/main
         # Skip the specific file from being committed
@@ -31,7 +36,9 @@ jobs:
 #        git reset -- config.toml
       
     - name: Commit changes
+      if: steps.check_changes.outputs.changes > 0
       run: git commit -m "Sync upstream changes"
 
     - name: Push changes to fork
+      if: steps.check_changes.outputs.changes > 0
       run: git push origin HEAD
