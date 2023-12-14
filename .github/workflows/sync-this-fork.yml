@@ -24,16 +24,15 @@ jobs:
 
     - name: Check for changes
       id: check_changes
-      run: echo ::set-output name=changes::$(git rev-list HEAD...upstream/main --count)
+      run: echo ::set-output name=changes::$(git diff --name-only HEAD...upstream/main | wc -l)
 
     - name: Merge changes (excluding config.toml)
       if: steps.check_changes.outputs.changes > 0
       run: |
-        git merge --no-commit --no-ff --allow-unrelated-histories --strategy-option=theirs upstream/main
+        git merge --no-commit --no-ff upstream/main
         # Skip the specific file from being committed
-        git checkout HEAD -- config.toml
+        git checkout --theirs -- config.toml
         git add -u 
-#        git reset -- config.toml
       
     - name: Commit changes
       if: steps.check_changes.outputs.changes > 0
