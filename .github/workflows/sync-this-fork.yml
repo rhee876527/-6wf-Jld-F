@@ -24,7 +24,7 @@ jobs:
 
     - name: Merge changes (excluding config.toml)
       run: |
-        git merge --no-commit --no-ff upstream/main
+        git merge --no-commit --no-ff --allow-unrelated-histories upstream/main
         # Skip the specific file from being committed
         git reset -- config.toml
       
