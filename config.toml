@@ -5,12 +5,14 @@ build-mindetach-module = false
 [YouTube]
 apkmirror-dlurl = "https://apkmirror.com/apk/google-inc/youtube/"
 build-mode = "module"
-version = "latest"
+#version = "latest"
+version = "auto"
 included-patches = "'Theme' 'Disable player popup panels' 'Disable resuming Shorts on startup' 'Hide cast button' 'Disable auto captions' 'Return YouTube Dislike' 'Change start page' 'Hide info cards' 'Hide floating microphone button' 'Hide album cards' 'Hide crowdfunding box' 'Hide breaking news shelf' 'Hide Shorts components' 'Hide filter bar' 'Disable rolling number animations' 'Restore old seekbar thumbnails' 'SponsorBlock' 'Remove viewer discretion dialog' 'Copy video url' 'Enable slide to seek' 'Remember video quality' 'HDR auto brightness' 'Restore old video quality menu' 'Video ads' 'Hide ads' 'Remove tracking query parameter' 'Disable zoom haptics'"
 exclusive-patches = true
 
 [Tiktok]
 apkmirror-dlurl = "https://apkmirror.com/apk/tiktok-pte-ltd/tik-tok-including-musical-ly/"
-version = "latest"
+#version = "latest"
+version = "auto"
 included-patches = "'SIM spoof'"
 excluded-patches = "'Playback speed' 'Disable login requirement' 'Settings'"
