@@ -1,3 +1,5 @@
+name: Sync
+
 on:
   schedule:
     - cron: '0 0 * * *'  # Run daily, adjust the schedule as needed
@@ -17,30 +19,43 @@ jobs:
         git config --global user.email "${{ github.actor }}@users.noreply.github.com"
         git remote add upstream https://github.com/j-hc/revanced-magisk-module.git  
 
-    - name: Fetch upstream changes
-      run: git fetch upstream
-
-    - name: Check for new commits in upstream
-      id: check-commits
+    - name: Check for changes
+      id: check-sync
       run: |
-        git rev-list --count HEAD..upstream/main
+        git fetch upstream
+        LOCAL=$(git rev-parse @)
+        REMOTE=$(git rev-parse upstream/main)
+        BASE=$(git merge-base @ upstream/main)
+        if [ $LOCAL = $REMOTE ]; then
+          echo "Fork is already synced with upstream."
+          exit 0
+        fi
+        if [ $LOCAL = $BASE ]; then
+          echo "Local branch is behind upstream. Need to pull changes."
+          exit 1
+        fi
+        echo "Local branch has diverged from upstream. Manual intervention may be needed."
+        exit 2
 
-    - name: Merge changes if new commits exist
-      if: steps.check-commits.outputs.stdout > 0
-      run: |
-        git merge --no-commit --no-ff -Xtheirs upstream/main || true
+    - name: Pull changes from upstream
+      if: steps.check-sync.outputs.code == 1
+      run: git pull upstream main
+
+    - name: Merge changes if needed
+      if: steps.check-sync.outputs.code == 2
+      run: git merge --no-commit --no-ff -Xtheirs upstream/main || true
         # Exclude config file from being synchronized
         git reset HEAD config.toml || true
         git checkout -- config.toml || true
         git add -u 
 
     - name: Commit changes
-      if: steps.check-commits.outputs.stdout > 0
+      if: steps.check-sync.outputs.code == 2
       run: |
         git commit -m "Sync upstream changes" || echo "No changes to commit"
 
     - name: Push changes
-      if: steps.check-commits.outputs.stdout > 0
+      if: steps.check-sync.outputs.code == 2
       run: git push origin main
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
