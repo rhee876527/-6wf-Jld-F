@@ -26,9 +26,12 @@ jobs:
         LOCAL=$(git rev-parse @)
         REMOTE=$(git rev-parse upstream/main)
         BASE=$(git merge-base @ upstream/main)
+        echo "LOCAL: $LOCAL"
+        echo "REMOTE: $REMOTE"
+        echo "BASE: $BASE"
         if [ $LOCAL = $REMOTE ]; then
           echo "Fork is already synced with upstream."
-          exit 0
+        exit 0
         fi
         if [ $LOCAL = $BASE ]; then
           echo "Local branch is behind upstream. Need to pull changes."
