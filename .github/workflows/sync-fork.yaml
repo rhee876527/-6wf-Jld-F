@@ -44,8 +44,7 @@ jobs:
     - name: Merge changes if needed
       if: steps.check-sync.outputs.code == 2
       run: git merge --no-commit --no-ff -Xtheirs upstream/main || true
-        # Exclude config file from being synchronized
-        git reset HEAD config.toml || true
+        git reset HEAD -- config.toml || true
         git checkout -- config.toml || true
         git add -u 
 
