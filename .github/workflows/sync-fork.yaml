@@ -17,7 +17,7 @@ jobs:
       run: |
         git config --global user.name "${{ github.actor }}"
         git config --global user.email "${{ github.actor }}@users.noreply.github.com"
-        git remote add upstream https://github.com/j-hc/revanced-magisk-module.git  
+        git remote add upstream https://github.com/j-hc/revanced-magisk-module.git
 
     - name: Fetch upstream changes
       run: git fetch upstream
@@ -25,27 +25,32 @@ jobs:
     - name: Check if fork is behind upstream
       id: check_behind
       run: |
-        UPSTREAM=${{ github.event.repository.name }}
-        git fetch upstream
+        echo "HEAD: $(git rev-parse HEAD)"
+        echo "Upstream Main: $(git rev-parse upstream/main)"
         BEHIND_COUNT=$(git rev-list --count HEAD..upstream/main)
-        echo "::set-output name=behind_count::$BEHIND_COUNT"
+        echo "BEHIND_COUNT: $BEHIND_COUNT"
+        echo "behind_count=$BEHIND_COUNT" >> $GITHUB_ENV
+
+    - name: Debug Environment Variables
+      run: |
+        echo "BEHIND_COUNT from env: ${{ env.behind_count }}"
 
     - name: Merge changes
-      if: steps.check_behind.outputs.behind_count != '0'
+      if: env.behind_count != '0'
       run: |
         git merge --no-commit --no-ff -Xtheirs --allow-unrelated-histories upstream/main || true
         # Exclude config file from being synchronized
         git reset HEAD config.toml || true
         git checkout -- config.toml || true
-        git add -u 
+        git add -u
 
     - name: Commit changes
-      if: steps.check_behind.outputs.behind_count != '0'
+      if: env.behind_count != '0'
       run: |
         git commit -m "Sync upstream changes" || echo "No changes to commit"
 
     - name: Push changes
-      if: steps.check_behind.outputs.behind_count != '0'
+      if: env.behind_count != '0'
       run: git push origin main
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
