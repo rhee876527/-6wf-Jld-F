@@ -22,21 +22,26 @@ jobs:
     - name: Fetch upstream changes
       run: git fetch upstream
 
-    - name: Check if fork is behind upstream
-      id: check_behind
+    - name: Get commit dates
+      id: get_commit_dates
       run: |
-        echo "HEAD: $(git rev-parse HEAD)"
-        echo "Upstream Main: $(git rev-parse upstream/main)"
-        BEHIND_COUNT=$(git rev-list --count HEAD..upstream/main)
-        echo "BEHIND_COUNT: $BEHIND_COUNT"
-        echo "behind_count=$BEHIND_COUNT" >> $GITHUB_ENV
+        # Get the date of the latest commit on the current branch
+        FORK_DATE=$(git log -1 --format=%ct HEAD)
+        echo "FORK_DATE=$FORK_DATE" >> $GITHUB_ENV
+        echo "Fork last commit date: $(date -d @$FORK_DATE)"
 
-    - name: Debug Environment Variables
+        # Get the date of the latest commit on the upstream branch
+        UPSTREAM_DATE=$(git log -1 --format=%ct upstream/main)
+        echo "UPSTREAM_DATE=$UPSTREAM_DATE" >> $GITHUB_ENV
+        echo "Upstream last commit date: $(date -d @$UPSTREAM_DATE)"
+
+    - name: Debug commit dates
       run: |
-        echo "BEHIND_COUNT from env: ${{ env.behind_count }}"
+        echo "FORK_DATE from env: ${{ env.FORK_DATE }}"
+        echo "UPSTREAM_DATE from env: ${{ env.UPSTREAM_DATE }}"
 
     - name: Merge changes
-      if: env.behind_count != '0'
+      if: env.FORK_DATE < env.UPSTREAM_DATE
       run: |
         git merge --no-commit --no-ff -Xtheirs --allow-unrelated-histories upstream/main || true
         # Exclude config file from being synchronized
@@ -45,12 +50,12 @@ jobs:
         git add -u
 
     - name: Commit changes
-      if: env.behind_count != '0'
+      if: env.FORK_DATE < env.UPSTREAM_DATE
       run: |
         git commit -m "Sync upstream changes" || echo "No changes to commit"
 
     - name: Push changes
-      if: env.behind_count != '0'
+      if: env.FORK_DATE < env.UPSTREAM_DATE
       run: git push origin main
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
