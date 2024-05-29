@@ -2,7 +2,7 @@ name: Sync
 
 on:
   schedule:
-    - cron: '0 0 * * *'  # Run daily, adjust the schedule as needed
+    - cron: '0 21 * * 2,0' # Tue & Sun 9PM UTC
   workflow_dispatch:
 
 jobs:
@@ -19,45 +19,22 @@ jobs:
         git config --global user.email "${{ github.actor }}@users.noreply.github.com"
         git remote add upstream https://github.com/j-hc/revanced-magisk-module.git  
 
-    - name: Check for changes
-      id: check-sync
+    - name: Fetch upstream changes
+      run: git fetch upstream
+
+    - name: Merge changes
       run: |
-        git fetch upstream
-        LOCAL=$(git rev-parse @)
-        REMOTE=$(git rev-parse upstream/main)
-        BASE=$(git merge-base @ upstream/main)
-        echo "LOCAL: $LOCAL"
-        echo "REMOTE: $REMOTE"
-        echo "BASE: $BASE"
-        if [ $LOCAL = $REMOTE ]; then
-          echo "Fork is already synced with upstream."
-        exit 0
-        fi
-        if [ $LOCAL = $BASE ]; then
-          echo "Local branch is behind upstream. Need to pull changes."
-          exit 1
-        fi
-        echo "Local branch has diverged from upstream. Manual intervention may be needed."
-        exit 2
-
-    - name: Pull changes from upstream
-      if: steps.check-sync.outputs.code == 1
-      run: git pull upstream main
-
-    - name: Merge changes if needed
-      if: steps.check-sync.outputs.code == 2
-      run: git merge --no-commit --no-ff -Xtheirs upstream/main || true
-        git reset HEAD -- config.toml || true
+        git merge --no-commit --no-ff -Xtheirs upstream/main || true
+        # Exclude config file from being synchronized
+        git reset HEAD config.toml || true
         git checkout -- config.toml || true
         git add -u 
 
     - name: Commit changes
-      if: steps.check-sync.outputs.code == 2
       run: |
         git commit -m "Sync upstream changes" || echo "No changes to commit"
 
     - name: Push changes
-      if: steps.check-sync.outputs.code == 2
       run: git push origin main
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
