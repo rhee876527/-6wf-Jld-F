@@ -24,7 +24,7 @@ jobs:
 
     - name: Merge changes
       run: |
-        git merge --no-commit --no-ff -Xtheirs upstream/main || true
+        git merge --no-commit --no-ff -Xtheirs --allow-unrelated-histories upstream/main || true
         # Exclude config file from being synchronized
         git reset HEAD config.toml || true
         git checkout -- config.toml || true
