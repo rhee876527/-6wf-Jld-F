@@ -35,11 +35,6 @@ jobs:
         echo "UPSTREAM_DATE=$UPSTREAM_DATE" >> $GITHUB_ENV
         echo "Upstream last commit date: $(date -d @$UPSTREAM_DATE)"
 
-    - name: Debug commit dates
-      run: |
-        echo "FORK_DATE from env: ${{ env.FORK_DATE }}"
-        echo "UPSTREAM_DATE from env: ${{ env.UPSTREAM_DATE }}"
-
     - name: Merge changes
       if: env.FORK_DATE < env.UPSTREAM_DATE
       run: |
