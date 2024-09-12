@@ -36,7 +36,7 @@ jobs:
         echo "Upstream last commit date: $(date -d @$UPSTREAM_DATE)"
 
     - name: Merge changes
-      if: env.FORK_DATE < env.UPSTREAM_DATE
+      if: env.FORK_DATE > env.UPSTREAM_DATE
       run: |
         git merge --no-commit --no-ff -Xtheirs --allow-unrelated-histories upstream/main || true
         # Exclude config file from being synchronized
@@ -45,12 +45,12 @@ jobs:
         git add -u
 
     - name: Commit changes
-      if: env.FORK_DATE < env.UPSTREAM_DATE
+      if: env.FORK_DATE > env.UPSTREAM_DATE
       run: |
         git commit -m "Sync upstream changes" || echo "No changes to commit"
 
     - name: Push changes
-      if: env.FORK_DATE < env.UPSTREAM_DATE
+      if: env.FORK_DATE > env.UPSTREAM_DATE
       run: git push origin main
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
